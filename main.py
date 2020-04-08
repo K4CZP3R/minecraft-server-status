@@ -2,9 +2,11 @@ import minestat
 
 from sanic import Sanic
 from sanic.response import json
+from sanic_cors import CORS, cross_origin
 
 
 app = Sanic()
+CORS(app)
 
 @app.route("/<server_addr:string>")
 async def test(request, server_addr):
