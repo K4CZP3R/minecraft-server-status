@@ -1,11 +1,8 @@
 import minestat, socket, mcrcon
+from os import getenv
+from fastapi import FastAPI
 
-from sanic import Sanic
-from sanic.response import json
-from sanic_cors import CORS, cross_origin
-
-app = Sanic()
-CORS(app)
+app = FastAPI()
 
 def extract_player_list(input_list):
     input_list = input_list.replace("\n","")
@@ -30,27 +27,24 @@ def extract_player_list(input_list):
 
     return formatted_list.split(",")
     
-
-
-@app.route("/<server_addr:string>")
-async def test(request, server_addr):
-    a = minestat.MineStat(server_addr, 25565).__dict__
+@app.get("/")
+def show_server():
+    server_addr = getenv("SERVER_HOSTNAME")
+    server_port = int(getenv("SERVER_PORT"))
+    rcon_pass = getenv("RCON_PASSWORD")
+    rcon_port = int(getenv("RCON_PORT"))
+    ms = minestat.MineStat(server_addr, server_port)
     
-    rcon_pass = request.args.get("rcon_pass", None)
     
     if rcon_pass is not None:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.connect((server_addr, 25575))
+        sock.connect((server_addr, rcon_port))
         result = mcrcon.login(sock, rcon_pass)
         if result:
             players = mcrcon.command(sock,"list")
 
             players = extract_player_list(players)
-            a["players"] = players
-        else:
-            a["players"] = []
+            ms.set_players(players)
     
 
-    return json(a)
-
-app.run(host="0.0.0.0", port=8000)
+    return ms

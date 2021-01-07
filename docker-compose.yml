@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  test:
+    build: .
+    environment:
+      SERVER_HOSTNAME: 
+      SERVER_PORT: 
+      RCON_PORT: 
+      RCON_PASSWORD: 
+    ports:
+      - 8000:80
