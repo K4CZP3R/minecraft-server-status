@@ -37,7 +37,6 @@ class MineStat:
     self.motd = None            # message of the day
     self.current_players = None # current number of players online
     self.max_players = None     # maximum player capacity
-    self.players = []
     self.latency = None         # ping time to server in milliseconds
 
     # Connect to the server and get the data
@@ -71,5 +70,3 @@ class MineStat:
         self.max_players = data[5].replace("\x00", "")
       else:
         self.online = False
-  def set_players(self, players):
-    self.players = players
