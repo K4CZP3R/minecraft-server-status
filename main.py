@@ -1,4 +1,4 @@
-import minestat, socket, mcrcon
+import minestat
 from os import getenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
