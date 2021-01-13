@@ -91,7 +91,6 @@ async def ws_background():
 
 @app.on_event('startup')
 async def startup_event():
-    stats_repo.get_data()
     task1 = asyncio.create_task(
         ws_background()
     )
